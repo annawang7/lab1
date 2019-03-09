@@ -44,7 +44,7 @@ exercise2 is a function that returns 42 (instead of failing). When you
 submit, the Exercise 2 unit test should then pass.
 ......................................................................*)
 
-let exercise2 () = failwith "exercise2 not implemented" ;;
+let exercise2 () = 42 ;;
 
 (* From here on, you'll want to test your lab solutions locally before
 submitting them at the end of lab to Gradescope. A simple way to do that
@@ -101,7 +101,7 @@ appropriate OCaml expression to assign the value to the variable
 exercise1 below.
 ......................................................................*)
 
-let exercise3 () = failwith "exercise3 not implemented" ;;
+let exercise3 () = ~-(5-3);;
 
 (* Hint: The OCaml concrete expression
 
@@ -148,25 +148,20 @@ expressions below? Test your solution by uncommenting the examples
 error is generated.
 ......................................................................*)
 
-(*  <--- After you've replaced the ???s, remove this start of comment line
+let exercise6a : int = 42 ;;
 
-let exercise6a : ??? = 42 ;;
-
-let exercise6b : ??? =
+let exercise6b : string =
   let greet y = "Hello " ^ y
   in greet "World!";;
 
-let exercise6c : ??? =
+let exercise6c : float -> float =
   fun x -> x +. 11.1 ;;
 
-let exercise6d : ??? =
+let exercise6d : int -> bool =
   fun x -> x < x + 1 ;;
 
-let exercise6e : ??? =
+let exercise6e : (int -> float -> int) =
   fun x -> fun y -> x + int_of_float y ;;
-
-
-and remove this whole end of comment line too. ---->  *)
 
 (*======================================================================
 Part 3: First-order functional programming
@@ -196,10 +191,9 @@ tests are comprehensive. You may want to add some tests for other
 functions in the lab to get some practice with automated unit testing.
 ......................................................................*)
 
-let square (x : int) : int  =
-  failwith "square not implemented" ;;
+let square (x : int) : int  = x * x ;;
 
-let exercise7 = 0 ;;
+let exercise7 = square 5 ;;
 
 (*......................................................................
 Exercise 8: Define a function say_hello that, given a name, creates a
@@ -218,7 +212,10 @@ to the function.
 ......................................................................*)
 
 let say_hello (name : string) : string =
-  failwith "say_hello not implemented";;
+  let home : string = 
+    if String.lowercase_ascii name = "gabby" then ". Welcome home! " 
+    else ". " in
+  "Hi " ^ name ^ home ^ "How are you today?" ;;
 
 (*......................................................................
 Exercise 9: Define a function, small_bills, that determines, given a
@@ -230,8 +227,7 @@ assume (perhaps unrealistically) that all prices are given as
 integers. For this lab, you may assume all prices given are
 non-negative.
 ......................................................................*)
-let small_bills (price : int) : bool =
-  failwith "small_bills not implemented" ;;
+let small_bills (price : int) : bool = price mod 20 > 0 ;;
 
 (*......................................................................
 Exercise 10:
@@ -259,10 +255,26 @@ that:
 
 ......................................................................*)
 
+let easter_helper (year : int) : int = 
+  let a = year mod 19 in
+  let b = year / 100 in
+  let c = year mod 100 in
+  let d = b / 4 in
+  let e = b mod 4 in
+  let f = (b+8) / 25 in
+  let g = (b-f+1) / 3 in
+  let h = (19*a+b-d-g+15) mod 30 in
+  let i = c / 4 in
+  let k = c mod 4 in
+  let l = (32+2*e+2*i-h-k) mod 7 in
+  let m = (a+11*h+22*l) / 451 in
+  h + l - 7 * m + 114 ;;
+
 let computus_month (year : int) : int =
-  failwith "computus_month not implemented" ;;
+  (easter_helper year) / 31 ;;
+
 let computus_day (year : int) : int =
-  failwith "computus_day not implemented" ;;
+  (easter_helper) year mod 31 + 1 ;;
 
 (*======================================================================
 Part 4: Utilizing recursion
@@ -280,8 +292,10 @@ this exercise, you may assume all inputs will be positive.
 
 ......................................................................*)
 
-let factorial (x : int) : int =
-  failwith "factorial not implementated" ;;
+let rec factorial (x : int) : int =
+  match x with
+  | 0 -> 1
+  | n -> n * factorial (n-1) ;;
 
 (*......................................................................
 Exercise 12: Define a recursive function that sums all the elements
@@ -299,5 +313,7 @@ the mathematician Carl Freiedrich Gauss as a seven-year-old, *in his
 head*!)
 ......................................................................*)
 
-let sum_from_zero (x : int) : int =
-  failwith "sum_from_zero not implemented" ;;
+let rec sum_from_zero (x : int) : int =
+  if x = 0 then 0
+  else if x > 0 then x + sum_from_zero (x-1)
+  else x + sum_from_zero (x+1) ;;
